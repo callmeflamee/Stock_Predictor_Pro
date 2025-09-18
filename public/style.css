@@ -1,0 +1,53 @@
+/* --- Base and Typography --- */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0d1117; /* A deep, dark background */
+    color: #c9d1d9; /* Off-white text for better readability */
+}
+
+/* --- Card and Layout --- */
+.card {
+    background-color: #161b22; /* A slightly lighter card background */
+    border: 1px solid #30363d; /* Subtle border */
+    border-radius: 0.75rem;
+}
+
+/* --- Header --- */
+.header-title {
+    color: #f0f6fc;
+    /* Creating a gradient with your primary and secondary colors */
+    background: linear-gradient(90deg, #7287fd, #ea76cb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-emphasis-color: transparent;
+}
+.header-subtitle {
+    color: #8b949e;
+}
+
+/* --- Interactive Elements --- */
+.stock-selector {
+    background-color: #0d1117;
+    border-color: #30363d;
+    color: #c9d1d9;
+}
+.stock-selector:focus {
+    --tw-ring-color: #7287fd; /* Primary color for focus ring */
+    border-color: #7287fd;
+}
+
+/* --- Loader Animation --- */
+.loader {
+    border: 4px solid #30363d;
+    border-top: 4px solid #7287fd; /* Primary color for spinner */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+

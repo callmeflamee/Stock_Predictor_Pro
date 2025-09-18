@@ -1,0 +1,35 @@
+# Core data manipulation and numerical operations
+pandas==2.2.2
+numpy==1.26.4
+
+# For fetching financial data
+yfinance==0.2.37 #changed from 0.2.25 to 0.2.37
+
+# --- NEW: Explicitly define core networking libraries for stability ---
+requests==2.31.0 #changed from 2.28.2 to 2.31.0
+urllib3==1.26.18
+certifi==2024.7.4
+
+# For scraping Twitter data
+twscrape==0.17.0
+tqdm==4.66.4
+
+# For Natural Language Processing for sentiment analysis
+vaderSentiment==3.3.2
+scikit-learn==1.5.1
+
+# Deep Learning framework for the LSTM model
+tensorflow==2.15.0
+keras==2.15.0
+
+# For saving the scaler model
+joblib==1.4.2
+
+#  For creating interactive charts
+plotly==5.22.0
+
+# For AI-powered summaries
+google-generativeai==0.7.1
+
+# CRITICAL FIX for TensorFlow compatibility
+protobuf==4.25.3
