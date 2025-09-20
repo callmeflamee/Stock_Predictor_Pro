@@ -1,0 +1,25 @@
+# Environment variables - NEVER commit this file
+.env
+
+# Configuration file containing secrets
+config.ini
+
+# Python virtual environment
+/myenv/
+
+# Python cache
+pycache/
+*.pyc
+
+# Data folders
+/data/
+/public/predictions/
+
+# Models folder
+/models/
+
+# twscrape database
+twscrape.db
+
+# VSCode settings
+.vscode/
