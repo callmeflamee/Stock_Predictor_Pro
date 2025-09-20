@@ -110,7 +110,6 @@ async def collect_data(config):
     db_path = "twscrape.db"
     api = API(db_path)
     
-    await api.pool.add_account("ShaikhBilquees", "Shaikhbilquees7", "shaikhbilquees2@gmail.com", "--manual")
     await api.pool.login_all()
     
     all_accounts = await api.pool.get_all()
@@ -144,4 +143,5 @@ async def collect_data(config):
 
 def run_data_collection(config):
     asyncio.run(collect_data(config))
+
 
