@@ -6,7 +6,6 @@ import sys
 import requests
 import time
 import random
-import logging
 
 # Import the news fetching function from its dedicated module
 from news_fetcher import fetch_news_and_sentiment
@@ -137,46 +136,45 @@ async def collect_data(config):
             final_news_df.to_csv(raw_news_path, index=False)
             print(f"Saved/updated raw news sentiment data to {raw_news_path}")
 
-    # --- 3. TWEET DATA (NEW Intelligent, Independent Logic) ---
-    ## commented out for now, data is collected through standalone script
-   ## should_fetch_tweets = True
-   ## tweet_since_date = (today - timedelta(days=7)).strftime('%Y-%m-%d')
-   ## if os.path.exists(raw_tweet_path):
-   ##     final_tweet_df = pd.read_csv(raw_tweet_path)
-   ##     if not final_tweet_df.empty:
-   ##         last_tweet_date = pd.to_datetime(final_tweet_df['date'], format='mixed').max().date()
-   ##         if last_tweet_date >= today:
-   ##             print("\nTweet data is already up to date.")
-   ##             should_fetch_tweets = False
-   ##         else:
-   ##             tweet_since_date = (last_tweet_date).strftime('%Y-%m-%d')
-   ## else:
-   ##     final_tweet_df = pd.DataFrame(columns=["stock", "date", "text"])
+    ## --- 3. TWEET DATA (NEW Intelligent, Independent Logic) ---
+    ## commenting out tweet scraping for now, handed in tweetscraper.py
+    ##should_fetch_tweets = True
+    ##tweet_since_date = (today - timedelta(days=7)).strftime('%Y-%m-%d')
+    ##if os.path.exists(raw_tweet_path):
+    ##    final_tweet_df = pd.read_csv(raw_tweet_path)
+    ##    if not final_tweet_df.empty:
+    ##        last_tweet_date = pd.to_datetime(final_tweet_df['date'], format='mixed').max().date()
+    ##        if last_tweet_date >= today:
+    ##            print("\nTweet data is already up to date.")
+    ##            should_fetch_tweets = False
+    ##        else:
+    ##            tweet_since_date = (last_tweet_date).strftime('%Y-%m-%d')
+    ##else:
+    ##    final_tweet_df = pd.DataFrame(columns=["stock", "date", "text"])
 ##
-   ## if should_fetch_tweets:
-   ##     print(f"\nScraping new tweets from {tweet_since_date} onwards...")
-   ##     db_path = "twscrape.db"
-   ##     api = API(db_path)
-   ##     await api.pool.login_all()
-   ##     all_accounts = await api.pool.get_all()
-   ##     active_accounts = [acc for acc in all_accounts if acc.active]
-   ##     if not active_accounts:
-   ##         print("Warning: No active Twitter accounts available. Skipping tweet scraping.")
-   ##     else:
-   ##         tweets_per_stock = int(data_config.get('tweets_per_stock', 2000))
-   ##         tasks = [scrape_tweets(api, stock, tweets_per_stock, tweet_since_date, today_str) for stock in stocks_in_config]
-   ##         results = await asyncio.gather(*tasks)
-   ##         new_tweets = [tweet for stock_tweets in results for tweet in stock_tweets]
-   ##         if new_tweets:
-   ##             new_tweet_df = pd.DataFrame(new_tweets, columns=["stock", "date", "text"])
-   ##             final_tweet_df = pd.concat([final_tweet_df, new_tweet_df])
-   ##             final_tweet_df.drop_duplicates(subset=['date', 'text'], keep='last', inplace=True)
-   ##             final_tweet_df.sort_values(by=['stock', 'date'], inplace=True)
-   ##     
-   ##     os.makedirs(os.path.dirname(raw_tweet_path), exist_ok=True)
-   ##     final_tweet_df.to_csv(raw_tweet_path, index=False)
-   ##     print(f"Raw tweet data file is up to date at {raw_tweet_path}")
-
+    ##if should_fetch_tweets:
+    ##    print(f"\nScraping new tweets from {tweet_since_date} onwards...")
+    ##    db_path = "twscrape.db"
+    ##    api = API(db_path)
+    ##    await api.pool.login_all()
+    ##    all_accounts = await api.pool.get_all()
+    ##    active_accounts = [acc for acc in all_accounts if acc.active]
+    ##    if not active_accounts:
+    ##        print("Warning: No active Twitter accounts available. Skipping tweet scraping.")
+    ##    else:
+    ##        tweets_per_stock = int(data_config.get('tweets_per_stock', 2000))
+    ##        tasks = [scrape_tweets(api, stock, tweets_per_stock, tweet_since_date, today_str) for stock in stocks_in_config]
+    ##        results = await asyncio.gather(*tasks)
+    ##        new_tweets = [tweet for stock_tweets in results for tweet in stock_tweets]
+    ##        if new_tweets:
+    ##            new_tweet_df = pd.DataFrame(new_tweets, columns=["stock", "date", "text"])
+    ##            final_tweet_df = pd.concat([final_tweet_df, new_tweet_df])
+    ##            final_tweet_df.drop_duplicates(subset=['date', 'text'], keep='last', inplace=True)
+    ##            final_tweet_df.sort_values(by=['stock', 'date'], inplace=True)
+    ##    
+    ##    os.makedirs(os.path.dirname(raw_tweet_path), exist_ok=True)
+    ##    final_tweet_df.to_csv(raw_tweet_path, index=False)
+    ##    print(f"Raw tweet data file is up to date at {raw_tweet_path}")
 
 def run_data_collection(config):
     asyncio.run(collect_data(config))
