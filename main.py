@@ -1,52 +1,58 @@
 import configparser
+import sys
 import os
-from src.data_collection import run_data_collection
-from src.data_processing import run_data_processing
-from src.model import run_model_training
-from src.predict import run_prediction
+
+# --- CRITICAL FIX: Add the 'src' directory to the Python path ---
+# This ensures that Python can find all the modules inside the 'src' folder
+# when you run this script from the project's root directory.
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
+
+# Now, we can import our modules
+from data_collection import run_data_collection
+from data_processing import run_data_processing
+from model import run_model_training
+from predict import run_prediction
+
 
 def main():
     """
-    Runs the complete data pipeline:
-    1. Collects stock and tweet data.
-    2. Processes and merges the data, adding sentiment scores.
-    3. Trains the LSTM model on the processed data.
-    4. Generates and saves future predictions.
+    Main function to run the entire stock prediction pipeline.
     """
-    config_path = 'config.ini'
     config = configparser.ConfigParser()
+    config_path = 'config.ini'
     
-    # --- FIX: Added a check to ensure the config file is read correctly ---
     if not os.path.exists(config_path):
         print(f"Error: Configuration file '{config_path}' not found.")
-        print("Please make sure the file exists in the project's root directory.")
+        print("Please ensure the config.ini file is in the root of the project.")
         return
-
+        
     config.read(config_path)
 
-    # Validate that the config file has the necessary sections
-    if 'Data' not in config or 'Model' not in config:
-        print(f"Error: The '{config_path}' file is missing the required [Data] or [Model] sections.")
-        return
+    print("--- Stock Predictor Pro Pipeline ---")
+    
+    # Step 1: Data Collection
+    print("\n--- Step 1: Starting Data Collection ---")
+    run_data_collection(config)
+    print("\n--- Data Collection Finished ---")
 
-    print("--- Step 1: Starting Data Collection ---")
-    #run_data_collection(config)
-    print("\n--- Data Collection Finished ---\n")
+    # Step 2: Data Processing
+    print("\n--- Step 2: Starting Data Processing & Sentiment Analysis ---")
+    run_data_processing(config)
+    print("\n--- Data Processing Finished ---")
 
-    print("--- Step 2: Starting Data Processing & Sentiment Analysis ---")
-    #run_data_processing(config)
-    print("\n--- Data Processing Finished ---\n")
-
-    print("--- Step 3: Starting Model Training ---")
-    #run_model_training(config)
-    print("\n--- Model Training Finished ---\n")
-
-    print("--- Step 4: Starting Prediction Generation ---")
+    # Step 3: Model Training
+    print("\n--- Step 3: Starting Model Training ---")
+    run_model_training(config)
+    print("\n--- Model Training Finished ---")
+    
+    # Step 4: Prediction Generation
+    print("\n--- Step 4: Starting Prediction Generation ---")
     run_prediction(config)
-    print("\n--- Prediction Generation Finished ---\n")
+    print("\n--- Prediction Generation Finished ---")
+    
+    print("\n--- Pipeline execution complete! ---")
+    print("You can now open the 'public/index.html' file in your browser to see the results.")
 
-    print("✅✅✅ Pipeline Complete! You can now open public/index.html to see the results. ✅✅✅")
 
 if __name__ == "__main__":
     main()
-

@@ -4785,127 +4785,127 @@
     ],
     "predictions": [
         {
-            "date": "2025-09-20",
-            "predicted_close": 170.97740514789893
+            "date": "2023-01-04",
+            "predicted_close": 166.91360318200432
         },
         {
-            "date": "2025-09-21",
-            "predicted_close": 170.51501253585718
+            "date": "2023-01-05",
+            "predicted_close": 164.06319046366346
         },
         {
-            "date": "2025-09-22",
-            "predicted_close": 169.5713816744102
+            "date": "2023-01-06",
+            "predicted_close": 160.6903347984127
         },
         {
-            "date": "2025-09-23",
-            "predicted_close": 168.20193202599708
+            "date": "2023-01-07",
+            "predicted_close": 156.963539539986
         },
         {
-            "date": "2025-09-24",
-            "predicted_close": 166.479388421982
+            "date": "2023-01-08",
+            "predicted_close": 152.99782146556166
         },
         {
-            "date": "2025-09-25",
-            "predicted_close": 164.47452267361783
+            "date": "2023-01-09",
+            "predicted_close": 148.87309332588293
         },
         {
-            "date": "2025-09-26",
-            "predicted_close": 162.24863343790574
+            "date": "2023-01-10",
+            "predicted_close": 144.6449457243265
         },
         {
-            "date": "2025-09-27",
-            "predicted_close": 159.85164353305382
+            "date": "2023-01-11",
+            "predicted_close": 140.35270080808348
         },
         {
-            "date": "2025-09-28",
-            "predicted_close": 157.32302611296282
+            "date": "2023-01-12",
+            "predicted_close": 136.02439548957764
         },
         {
-            "date": "2025-09-29",
-            "predicted_close": 154.69348587526022
+            "date": "2023-01-13",
+            "predicted_close": 131.68045594306673
         },
         {
-            "date": "2025-09-30",
-            "predicted_close": 151.98673087336002
+            "date": "2023-01-14",
+            "predicted_close": 127.33592243683121
         },
         {
-            "date": "2025-10-01",
-            "predicted_close": 149.22127452986447
+            "date": "2023-01-15",
+            "predicted_close": 123.00216074255026
         },
         {
-            "date": "2025-10-02",
-            "predicted_close": 146.41160342178537
+            "date": "2023-01-16",
+            "predicted_close": 118.68755676616605
         },
         {
-            "date": "2025-10-03",
-            "predicted_close": 143.56929473019537
+            "date": "2023-01-17",
+            "predicted_close": 114.39853332639542
         },
         {
-            "date": "2025-10-04",
-            "predicted_close": 140.70375113954825
+            "date": "2023-01-18",
+            "predicted_close": 110.13987230237707
         },
         {
-            "date": "2025-10-05",
-            "predicted_close": 137.8226437906939
+            "date": "2023-01-19",
+            "predicted_close": 105.91507704977472
         },
         {
-            "date": "2025-10-06",
-            "predicted_close": 134.93239550234912
+            "date": "2023-01-20",
+            "predicted_close": 101.72669454842436
         },
         {
-            "date": "2025-10-07",
-            "predicted_close": 132.0383217106934
+            "date": "2023-01-21",
+            "predicted_close": 97.5764966103858
         },
         {
-            "date": "2025-10-08",
-            "predicted_close": 129.14492241567407
+            "date": "2023-01-22",
+            "predicted_close": 93.46564095376631
         },
         {
-            "date": "2025-10-09",
-            "predicted_close": 126.25601305348813
+            "date": "2023-01-23",
+            "predicted_close": 89.39485744432916
         },
         {
-            "date": "2025-10-10",
-            "predicted_close": 123.37471442946823
+            "date": "2023-01-24",
+            "predicted_close": 85.36456890086136
         },
         {
-            "date": "2025-10-11",
-            "predicted_close": 120.503714463046
+            "date": "2023-01-25",
+            "predicted_close": 81.37494646430049
         },
         {
-            "date": "2025-10-12",
-            "predicted_close": 117.64520778506825
+            "date": "2023-01-26",
+            "predicted_close": 77.42604047021645
         },
         {
-            "date": "2025-10-13",
-            "predicted_close": 114.80102661027867
+            "date": "2023-01-27",
+            "predicted_close": 73.51779051592537
         },
         {
-            "date": "2025-10-14",
-            "predicted_close": 111.97266087154573
+            "date": "2023-01-28",
+            "predicted_close": 69.65013116518641
         },
         {
-            "date": "2025-10-15",
-            "predicted_close": 109.16132868966055
+            "date": "2023-01-29",
+            "predicted_close": 65.82303725021463
         },
         {
-            "date": "2025-10-16",
-            "predicted_close": 106.36807704447666
+            "date": "2023-01-30",
+            "predicted_close": 62.03644333476917
         },
         {
-            "date": "2025-10-17",
-            "predicted_close": 103.59371130511217
+            "date": "2023-01-31",
+            "predicted_close": 58.29039975441993
         },
         {
-            "date": "2025-10-18",
-            "predicted_close": 100.83879522994972
+            "date": "2023-02-01",
+            "predicted_close": 54.585017247420645
         },
         {
-            "date": "2025-10-19",
-            "predicted_close": 98.10394794649888
+            "date": "2023-02-02",
+            "predicted_close": 50.92051729027879
         }
     ],
-    "summary": "Summary:  Investor sentiment toward NVDA is largely positive, with many anticipating further price increases driven by strong fundamentals and potential expansion into the Chinese market.  Concerns include the overall tech market volatility and potential competition, though these are generally outweighed by bullish predictions.  A key catalyst would be positive news, particularly regarding China.",
+    "summary": "Recent tweets reveal mixed sentiment towards NVDA, with discussions centered around analyst price targets and its strong Rule of 40 score, indicating robust financial health.  However, concerns include an insider sale and a lowered price target from Citi, counterbalancing the positive growth indicators.  Overall, the market sentiment appears cautiously optimistic, though further catalysts are needed to solidify a breakout.",
     "accuracy": {
         "mape": 1.0394195787455274,
         "directional_accuracy": 100.0

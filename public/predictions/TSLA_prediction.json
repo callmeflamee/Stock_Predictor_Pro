@@ -4743,124 +4743,124 @@
     ],
     "predictions": [
         {
-            "date": "2025-09-16",
-            "predicted_close": 371.65085893646074
+            "date": "2023-01-05",
+            "predicted_close": 378.8887512133228
         },
         {
-            "date": "2025-09-17",
-            "predicted_close": 379.18053594728593
+            "date": "2023-01-06",
+            "predicted_close": 388.22242811373957
         },
         {
-            "date": "2025-09-18",
-            "predicted_close": 384.1809170545402
+            "date": "2023-01-07",
+            "predicted_close": 394.96921885211253
         },
         {
-            "date": "2025-09-19",
-            "predicted_close": 387.615459141024
+            "date": "2023-01-08",
+            "predicted_close": 400.13029428581734
         },
         {
-            "date": "2025-09-20",
-            "predicted_close": 390.05164451512104
+            "date": "2023-01-09",
+            "predicted_close": 404.2824211858387
         },
         {
-            "date": "2025-09-21",
-            "predicted_close": 391.82581889955503
+            "date": "2023-01-10",
+            "predicted_close": 407.75680447460576
         },
         {
-            "date": "2025-09-22",
-            "predicted_close": 393.13497244354625
+            "date": "2023-01-11",
+            "predicted_close": 410.7413935835793
         },
         {
-            "date": "2025-09-23",
-            "predicted_close": 394.09421918817446
+            "date": "2023-01-12",
+            "predicted_close": 413.3437021465069
         },
         {
-            "date": "2025-09-24",
-            "predicted_close": 394.77165257872133
+            "date": "2023-01-13",
+            "predicted_close": 415.62710382219296
         },
         {
-            "date": "2025-09-25",
-            "predicted_close": 395.2099501210809
+            "date": "2023-01-14",
+            "predicted_close": 417.63203809571354
         },
         {
-            "date": "2025-09-26",
-            "predicted_close": 395.43794018242255
+            "date": "2023-01-15",
+            "predicted_close": 419.38724469975017
         },
         {
-            "date": "2025-09-27",
-            "predicted_close": 395.4774933226203
+            "date": "2023-01-16",
+            "predicted_close": 420.9152146355918
         },
         {
-            "date": "2025-09-28",
-            "predicted_close": 395.3468460875469
+            "date": "2023-01-17",
+            "predicted_close": 422.2356912354043
         },
         {
-            "date": "2025-09-29",
-            "predicted_close": 395.0626396022939
+            "date": "2023-01-18",
+            "predicted_close": 423.36649003124325
         },
         {
-            "date": "2025-09-30",
-            "predicted_close": 394.64034058498913
+            "date": "2023-01-19",
+            "predicted_close": 424.32438509993193
         },
         {
-            "date": "2025-10-01",
-            "predicted_close": 394.09472883647953
+            "date": "2023-01-20",
+            "predicted_close": 425.1250647458177
         },
         {
-            "date": "2025-10-02",
-            "predicted_close": 393.4400080334412
+            "date": "2023-01-21",
+            "predicted_close": 425.78308718352804
         },
         {
-            "date": "2025-10-03",
-            "predicted_close": 392.6898278870012
+            "date": "2023-01-22",
+            "predicted_close": 426.3125009793852
         },
         {
-            "date": "2025-10-04",
-            "predicted_close": 391.8568188116764
+            "date": "2023-01-23",
+            "predicted_close": 426.72595870652816
         },
         {
-            "date": "2025-10-05",
-            "predicted_close": 390.9531015736788
+            "date": "2023-01-24",
+            "predicted_close": 427.03551465530285
         },
         {
-            "date": "2025-10-06",
-            "predicted_close": 389.9899992288296
+            "date": "2023-01-25",
+            "predicted_close": 427.25209302633533
         },
         {
-            "date": "2025-10-07",
-            "predicted_close": 388.97777121909616
+            "date": "2023-01-26",
+            "predicted_close": 427.3859532615929
         },
         {
-            "date": "2025-10-08",
-            "predicted_close": 387.9261230208967
+            "date": "2023-01-27",
+            "predicted_close": 427.44635766505456
         },
         {
-            "date": "2025-10-09",
-            "predicted_close": 386.843918083015
+            "date": "2023-01-28",
+            "predicted_close": 427.4419702579066
         },
         {
-            "date": "2025-10-10",
-            "predicted_close": 385.73915566797854
+            "date": "2023-01-29",
+            "predicted_close": 427.38065735094455
         },
         {
-            "date": "2025-10-11",
-            "predicted_close": 384.619081645168
+            "date": "2023-01-30",
+            "predicted_close": 427.26970913079316
         },
         {
-            "date": "2025-10-12",
-            "predicted_close": 383.4902106494396
+            "date": "2023-01-31",
+            "predicted_close": 427.1157067081744
         },
         {
-            "date": "2025-10-13",
-            "predicted_close": 382.3584590328564
+            "date": "2023-02-01",
+            "predicted_close": 426.92485449723694
         },
         {
-            "date": "2025-10-14",
-            "predicted_close": 381.22914486468875
+            "date": "2023-02-02",
+            "predicted_close": 426.7025592017389
         },
         {
-            "date": "2025-10-15",
-            "predicted_close": 380.10669986932857
+            "date": "2023-02-03",
+            "predicted_close": 426.4538286702431
         }
     ],
     "summary": "Not enough recent tweets (found 0) for TSLA to generate a reliable summary.",
