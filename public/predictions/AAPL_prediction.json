@@ -2,18 +2,11 @@
     "stock": "AAPL",
     "historical": [
         {
-            "date": "2025-09-16",
-            "open": 237.17999267578125,
-            "high": 241.22000122070312,
-            "low": 236.32000732421875,
-            "close": 238.1499938964844
-        },
-        {
-            "date": "2025-09-17",
-            "open": 238.97000122070312,
-            "high": 240.1000061035156,
-            "low": 237.72999572753903,
-            "close": 238.9900054931641
+            "date": "2025-09-19",
+            "open": 241.22999572753903,
+            "high": 246.3000030517578,
+            "low": 240.2100067138672,
+            "close": 245.5
         },
         {
             "date": "2023-01-03",
@@ -4751,135 +4744,163 @@
             "date": "2025-09-16",
             "open": 237.17999267578125,
             "high": 241.22000122070312,
+            "low": 236.32000732421875,
+            "close": 238.1499938964844
+        },
+        {
+            "date": "2025-09-16",
+            "open": 237.17999267578125,
+            "high": 241.22000122070312,
             "low": 236.3235015869141,
             "close": 238.1499938964844
+        },
+        {
+            "date": "2025-09-17",
+            "open": 238.97000122070312,
+            "high": 240.1000061035156,
+            "low": 237.72999572753903,
+            "close": 238.9900054931641
+        },
+        {
+            "date": "2025-09-18",
+            "open": 239.97000122070312,
+            "high": 241.1999969482422,
+            "low": 236.6499938964844,
+            "close": 237.8800048828125
+        },
+        {
+            "date": "2025-09-19",
+            "open": 241.22999572753903,
+            "high": 246.3000030517578,
+            "low": 240.2100067138672,
+            "close": 245.5
         }
     ],
     "predictions": [
         {
-            "date": "2025-09-17",
-            "predicted_close": 233.77217359820497
-        },
-        {
-            "date": "2025-09-18",
-            "predicted_close": 233.9731388996879
-        },
-        {
-            "date": "2025-09-19",
-            "predicted_close": 234.07647434481623
-        },
-        {
             "date": "2025-09-20",
-            "predicted_close": 234.12609689506644
+            "predicted_close": 234.44658222729777
         },
         {
             "date": "2025-09-21",
-            "predicted_close": 234.14992375522706
+            "predicted_close": 234.9523143657425
         },
         {
             "date": "2025-09-22",
-            "predicted_close": 234.16519223222713
+            "predicted_close": 234.9652443549494
         },
         {
             "date": "2025-09-23",
-            "predicted_close": 234.18288759346615
+            "predicted_close": 234.69034748062404
         },
         {
             "date": "2025-09-24",
-            "predicted_close": 234.20993690587784
+            "predicted_close": 234.2432302217785
         },
         {
             "date": "2025-09-25",
-            "predicted_close": 234.25065552322485
+            "predicted_close": 233.69089708432148
         },
         {
             "date": "2025-09-26",
-            "predicted_close": 234.30767926679982
+            "predicted_close": 233.07245144145418
         },
         {
             "date": "2025-09-27",
-            "predicted_close": 234.38222157872224
+            "predicted_close": 232.4118326579046
         },
         {
             "date": "2025-09-28",
-            "predicted_close": 234.47466015289683
+            "predicted_close": 231.72386722844385
         },
         {
             "date": "2025-09-29",
-            "predicted_close": 234.5846896197836
+            "predicted_close": 231.01819840170356
         },
         {
             "date": "2025-09-30",
-            "predicted_close": 234.71154655553255
+            "predicted_close": 230.30130322634795
         },
         {
             "date": "2025-10-01",
-            "predicted_close": 234.85404162614577
+            "predicted_close": 229.5779229662876
         },
         {
             "date": "2025-10-02",
-            "predicted_close": 235.0108408488959
+            "predicted_close": 228.85152919102984
         },
         {
             "date": "2025-10-03",
-            "predicted_close": 235.18040130400186
+            "predicted_close": 228.12482201019156
         },
         {
             "date": "2025-10-04",
-            "predicted_close": 235.3611800716826
+            "predicted_close": 227.39995508263382
         },
         {
             "date": "2025-10-05",
-            "predicted_close": 235.55159405195445
+            "predicted_close": 226.6786883012319
         },
         {
             "date": "2025-10-06",
-            "predicted_close": 235.75011639711738
+            "predicted_close": 225.96238779287523
         },
         {
             "date": "2025-10-07",
-            "predicted_close": 235.95527651175507
+            "predicted_close": 225.25224289156176
         },
         {
             "date": "2025-10-08",
-            "predicted_close": 236.1657243410591
+            "predicted_close": 224.54921792215464
         },
         {
             "date": "2025-10-09",
-            "predicted_close": 236.38019822666683
+            "predicted_close": 223.85402005622018
         },
         {
             "date": "2025-10-10",
-            "predicted_close": 236.59755705082353
+            "predicted_close": 223.16726003283839
         },
         {
             "date": "2025-10-11",
-            "predicted_close": 236.8167722003418
+            "predicted_close": 222.4894039423598
         },
         {
             "date": "2025-10-12",
-            "predicted_close": 237.03699185492587
+            "predicted_close": 221.82079733452701
         },
         {
             "date": "2025-10-13",
-            "predicted_close": 237.25733205011784
+            "predicted_close": 221.16167325451534
         },
         {
             "date": "2025-10-14",
-            "predicted_close": 237.47719811891875
+            "predicted_close": 220.5121683150137
         },
         {
             "date": "2025-10-15",
-            "predicted_close": 237.69595521412703
+            "predicted_close": 219.8724352007921
         },
         {
             "date": "2025-10-16",
-            "predicted_close": 237.91308902914898
+            "predicted_close": 219.2424337316479
+        },
+        {
+            "date": "2025-10-17",
+            "predicted_close": 218.62204336697323
+        },
+        {
+            "date": "2025-10-18",
+            "predicted_close": 218.0114891159028
+        },
+        {
+            "date": "2025-10-19",
+            "predicted_close": 217.4105138251398
         }
     ],
-    "summary": "The tweets reveal a mix of bullish and bearish sentiment regarding Apple ($AAPL).  Discussion centers on the stock's recent price action, nearing all-time highs, and the upcoming iPhone releases as potential catalysts.  Concerns include the pace of Apple's AI advancements and potential tariff impacts on margins.",
+    "summary": "The tweets express a largely bullish sentiment toward $AAPL,  driven by a combination of strong recent financial performance and broader market momentum in tech.  However, a significant portion focuses on promotional material for various paid trading groups and their purported success, raising concerns about potential bias and lack of independent verification.",
     "accuracy": {
-        "mape": null,
-        "directional_accuracy": null
+        "mape": 3.911145613120516,
+        "directional_accuracy": 40.0
     }
 }
