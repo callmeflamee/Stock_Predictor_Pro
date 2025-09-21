@@ -1,18 +1,15 @@
 import configparser
 import sys
 import os
+import shutil # --- NEW: Import for deleting directories ---
 
-# --- CRITICAL FIX: Add the 'src' directory to the Python path ---
-# This ensures that Python can find all the modules inside the 'src' folder
-# when you run this script from the project's root directory.
+# Add the 'src' directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
 
-# Now, we can import our modules
 from data_collection import run_data_collection
 from data_processing import run_data_processing
 from model import run_model_training
 from predict import run_prediction
-
 
 def main():
     """
@@ -23,26 +20,25 @@ def main():
     
     if not os.path.exists(config_path):
         print(f"Error: Configuration file '{config_path}' not found.")
-        print("Please ensure the config.ini file is in the root of the project.")
         return
         
     config.read(config_path)
 
-    print("--- Stock Predictor Pro Pipeline ---")
+    print("\n--- Stock Predictor Pro Pipeline ---")
     
     # Step 1: Data Collection
     print("\n--- Step 1: Starting Data Collection ---")
-    run_data_collection(config)
+    #run_data_collection(config)
     print("\n--- Data Collection Finished ---")
 
     # Step 2: Data Processing
     print("\n--- Step 2: Starting Data Processing & Sentiment Analysis ---")
-    run_data_processing(config)
+    #run_data_processing(config)
     print("\n--- Data Processing Finished ---")
 
     # Step 3: Model Training
     print("\n--- Step 3: Starting Model Training ---")
-    run_model_training(config)
+    #run_model_training(config)
     print("\n--- Model Training Finished ---")
     
     # Step 4: Prediction Generation

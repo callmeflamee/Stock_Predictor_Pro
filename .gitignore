@@ -1,25 +1,32 @@
-# Environment variables - NEVER commit this file
+#Environment variables - NEVER commit this file
 .env
 
-# Configuration file containing secrets
+#Configuration file (can sometimes contain sensitive info, good practice to ignore)
 config.ini
 
-# Python virtual environment
+#Python virtual environment
 /myenv/
+/311env/
+/venv/
 
-# Python cache
+#Python cache
 pycache/
 *.pyc
+.pytest_cache/
 
-# Data folders
+#--- CRITICAL FIX: Ignore all generated data and prediction files ---
+#This will prevent the large HTML charts from being counted by GitHub.
 /data/
 /public/predictions/
-
-# Models folder
 /models/
 
-# twscrape database
+#twscrape database
 twscrape.db
+*.db
 
-# VSCode settings
+#VSCode/IDE settings
 .vscode/
+.idea/
+
+
+

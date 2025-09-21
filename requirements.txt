@@ -2,6 +2,9 @@
 pandas==2.2.2
 numpy==1.26.4
 
+# For Implementing ARIMA model
+statsmodels==0.14.2
+
 # For fetching financial data
 yfinance==0.2.37 #changed from 0.2.25 to 0.2.37
 
@@ -24,9 +27,6 @@ scikit-learn==1.5.1
 # Deep Learning framework for the LSTM model
 tensorflow==2.15.0
 keras==2.15.0
-
-# For saving the scaler model
-joblib==1.4.2
 
 #  For creating interactive charts
 plotly==5.22.0

@@ -35,12 +35,11 @@ def fetch_news_and_sentiment(stocks: list, start_date_str: str):
     
     print(f"Fetching news headlines from {effective_start_date.strftime('%Y-%m-%d')} to {today_str}...")
 
-    # --- NEW: Batching logic to handle a large number of stocks ---
-    batch_size = 4 # Group stocks into batches of 4
+    # Batching logic to handle a large number of stocks
+    batch_size = 4 
     stock_batches = [stocks[i:i + batch_size] for i in range(0, len(stocks), batch_size)]
 
     for batch in stock_batches:
-        # Create a single query string for the batch, e.g., "AAPL OR NVDA OR TSLA"
         query = " OR ".join(batch)
         print(f"\nFetching articles for batch: {query}")
         
@@ -54,14 +53,13 @@ def fetch_news_and_sentiment(stocks: list, start_date_str: str):
                 page_size=100
             )
             
+            # --- NEW: Added informative print statement ---
             num_articles = len(all_articles['articles'])
             print(f"Found {num_articles} articles for this batch.")
 
             for article in all_articles['articles']:
                 sentiment = analyzer.polarity_scores(article['title'])['compound']
                 
-                # --- NEW: Assign sentiment to the correct stock(s) within the batch ---
-                # Check which stock(s) from our batch are mentioned in the headline
                 article_title = article['title'].lower()
                 for stock in batch:
                     if stock.lower() in article_title:
@@ -71,7 +69,6 @@ def fetch_news_and_sentiment(stocks: list, start_date_str: str):
                             'news_sentiment': sentiment
                         })
             
-            # Be respectful to the API by adding a small delay between batches
             time.sleep(1) 
 
         except Exception as e:
@@ -79,7 +76,7 @@ def fetch_news_and_sentiment(stocks: list, start_date_str: str):
             continue
     
     if not all_news_data:
-        print("No relevant news articles were found across all stocks.")
+        print("\nNo relevant news articles were found across all stocks.")
         return pd.DataFrame()
 
     news_df = pd.DataFrame(all_news_data)
