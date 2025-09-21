@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Predictor Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- NEW: Import the Anime.js animation library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,23 +15,32 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="p-4 md:p-6 lg:p-8">
+
+    <!-- NEW: Loading Screen Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <svg id="loading-animation" class="loading-svg" viewBox="0 0 100 40">
+                <path d="M 0 20 L 10 25 L 20 15 L 30 22 L 40 18 L 50 28 L 60 20 L 70 15 L 80 25 L 90 20 L 100 15" fill="none" stroke-width="2"/>
+            </svg>
+            <p id="loading-text" class="loading-text">Initializing...</p>
+        </div>
+    </div>
+
     <header class="text-center mb-6 flex-shrink-0">
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold header-title">Stock Predictor Pro</h1>
-        <p class="text-md md:text-lg header-subtitle mt-2">LSTM & Sentiment Analysis Driven Stock Predictions</p>
+        <p class="text-md md:text-lg header-subtitle mt-2">Hybrid ARIMA-LSTM & Sentiment Analysis Driven Stock Predictions</p>
     </header>
 
     <main>
         <div class="card p-4 mb-6 flex-shrink-0">
-            <label for="stockSelector" class="block text-sm font-medium mb-2">Select a Stock:</label>
-            <select id="stockSelector" class="w-full stock-selector rounded-lg p-2.5" disabled>
-                <option selected>Loading available stocks...</option>
-            </select>
+            <label for="stockSearchInput" class="block text-sm font-medium mb-2">Select a Stock:</label>
+            <div class="searchable-dropdown">
+                <input type="text" id="stockSearchInput" class="search-input" placeholder="Search or select a stock..." disabled>
+                <div id="stockDropdownList" class="dropdown-list hidden"></div>
+            </div>
         </div>
 
-        <!-- This grid will grow to fill the remaining space -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 flex-grow overflow-hidden">
-            
-            <!-- Main Chart Area -->
             <div class="lg:col-span-2 card p-4 md:p-6 flex flex-col overflow-hidden">
                 <div id="initialMessage" class="flex flex-col items-center justify-center h-full text-gray-500 text-center">
                     <p>Please select a stock to view the prediction chart.</p>
@@ -37,39 +48,35 @@
                 <div id="loader" class="hidden items-center justify-center h-full">
                     <div class="loader"></div>
                 </div>
-                <!-- Iframe will be controlled by JS to fill its container -->
                 <iframe id="predictionChartFrame" class="hidden w-full flex-grow border-0 rounded-lg"></iframe>
                 <div id="errorMessage" class="hidden text-red-400 p-4 bg-red-900/20 rounded-lg"></div>
             </div>
 
-            <!-- Side Panel: This column will scroll on its own if content overflows -->
-            <div class="flex flex-col space-y-6 lg:space-y-8 overflow-y-auto">
+            <div class="flex flex-col space-y-6 lg:space-y-8 overflow-y-auto" id="side-panel">
                 <div class="card p-6 flex-shrink-0">
                     <h2 class="text-xl font-semibold text-white mb-4">Market Sentiment Summary</h2>
-                    <p id="sentimentSummary" class="text-gray-400 summary-text">Select a stock to see the summary.</p>
+                    <p id="sentimentSummary" class="text-gray-400">Select a stock to see the summary.</p>
                     <p class="text-xs text-gray-500 mt-4 italic">
-                        Note: The AI summary reflects public sentiment from social media. The price prediction is based on historical price trends and may differ.
+                        Note: The AI summary reflects public sentiment. The price prediction is based on a hybrid model and may differ.
                     </p>
                 </div>
                 <div class="card p-6 flex-shrink-0">
                     <h2 class="text-xl font-semibold text-white mb-4">Prediction Details</h2>
                     <ul class="space-y-3">
                         <li class="flex justify-between"><span>Last Actual Price:</span><span id="lastActualPrice" class="font-medium text-white">-</span></li>
-                        <li class="flex justify-between"><span>Predicted Next Day Price:</span><span id="predictedNextDayPrice" class="font-medium text-white">-</span></li>
-                        <li class="flex justify-between"><span>30-Day Trend Prediction:</span><span id="trendPrediction" class="font-medium text-white">-</span></li>
+                        <li class="flex justify-between"><span>Next Day (Hybrid):</span><span id="predictedNextDayPrice" class="font-medium text-white">-</span></li>
+                        <li class="flex justify-between"><span>30-Day Trend (LSTM):</span><span id="trendPrediction" class="font-medium text-white">-</span></li>
                         <li class="border-t border-gray-700 pt-3 mt-3 flex justify-between"><span>Directional Accuracy:</span><span id="directionalAccuracy" class="font-medium text-white">-</span></li>
                         <li class="flex justify-between"><span>Avg. Price Error (MAPE):</span><span id="mape" class="font-medium text-white">-</span></li>
                     </ul>
                     <p class="text-xs text-gray-600 mt-6 disclaimer-text">
-                        Disclaimer: This tool provides AI-generated predictions for informational purposes only. It is not financial advice. Do not base investment decisions solely on this data.
+                        Disclaimer: This tool provides AI-generated predictions for informational purposes only. It is not financial advice.
                     </p>
                 </div>
             </div>
-            
         </div>
     </main>
     
-    <!-- Your existing script.js file does not need any changes -->
     <script src="script.js" defer></script>
 </body>
 </html>
