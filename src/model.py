@@ -1,14 +1,14 @@
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
 from keras.models import Sequential
-from keras.layers import LSTM, Dense, Input
+from keras.layers import LSTM, Dense, Input, Dropout, BatchNormalization
+from keras.callbacks import EarlyStopping
+from keras.regularizers import l2
+from keras.optimizers import Adam
 import os
-import time
-import json 
-
-# Import the ARIMA training function
-from arima_model import train_and_save_arima
+import json
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -23,72 +23,91 @@ def build_and_train_model(config):
     try:
         df = pd.read_csv(processed_data_path)
     except FileNotFoundError:
-        print("Error: Processed data not found.")
+        print("Error: Processed data not found. Please run data collection and processing first.")
         return
 
     os.makedirs(model_dir, exist_ok=True)
     
     stocks = df['stock'].unique()
     for stock in stocks:
-        print(f"--- Processing models for {stock} ---")
+        print(f"--- Processing model for {stock} ---")
+        
+        model_path = os.path.join(model_dir, f'{stock}_model.keras')
+        params_path = os.path.join(model_dir, f'{stock}_scaling_params.json')
+
+        # --- OPTIMIZATION: Check if retraining is necessary ---
+        if os.path.exists(model_path):
+            model_mod_time = os.path.getmtime(model_path)
+            data_mod_time = os.path.getmtime(processed_data_path)
+            
+            if data_mod_time <= model_mod_time:
+                print(f"Model for {stock} is already up-to-date. Skipping training.")
+                continue
+            else:
+                print(f"Data has been updated. Retraining model for {stock}...")
         
         stock_df = df[df['stock'] == stock].copy()
-        model_path = os.path.join(model_dir, f'{stock}_model.keras')
         
-        needs_update = True
-        if os.path.exists(model_path):
-            data_mod_time = os.path.getmtime(processed_data_path)
-            model_mod_time = os.path.getmtime(model_path)
-            if model_mod_time >= data_mod_time:
-                needs_update = False
-
-        if not needs_update:
-            print(f"Models for {stock} are already up to date. Skipping training.")
+        if len(stock_df) < timesteps + 50:
+            print(f"Not enough data for {stock} to train a model. Skipping.")
             continue
         
-        print(f"--- Training LSTM model for {stock} ---")
-        if len(stock_df) < timesteps + 1:
-            print(f"Not enough data for {stock} to train. Skipping.")
-            continue
-        
-        features = ['close', 'sentiment']
+        features = ['close', 'sentiment', 'rsi']
         dataset = stock_df[features].values
         
+        train_data, val_data = train_test_split(dataset, test_size=0.15, shuffle=False)
+        
         scaler = MinMaxScaler(feature_range=(0, 1))
-        scaled_data = scaler.fit_transform(dataset)
+        scaler.fit(train_data)
+        scaled_train_data = scaler.transform(train_data)
+        scaled_val_data = scaler.transform(val_data)
 
-        scaling_params = {
-            'min_': scaler.min_.tolist(),
-            'scale_': scaler.scale_.tolist()
-        }
-        params_path = os.path.join(model_dir, f'{stock}_scaling_params.json')
+        scaling_params = {'min_': scaler.min_.tolist(), 'scale_': scaler.scale_.tolist()}
         with open(params_path, 'w') as f:
             json.dump(scaling_params, f)
-        print(f"Scaling parameters for {stock} saved successfully.")
 
-        X_train, y_train = [], []
-        for i in range(timesteps, len(scaled_data)):
-            X_train.append(scaled_data[i-timesteps:i, :])
-            y_train.append(scaled_data[i, 0])
-        X_train, y_train = np.array(X_train), np.array(y_train)
+        def create_sequences(data, timesteps):
+            X, y = [], []
+            for i in range(timesteps, len(data)):
+                X.append(data[i-timesteps:i, :])
+                y.append(data[i, 0])
+            return np.array(X), np.array(y)
+
+        X_train, y_train = create_sequences(scaled_train_data, timesteps)
+        X_val, y_val = create_sequences(scaled_val_data, timesteps)
+
+        if len(X_train) == 0 or len(X_val) == 0:
+            print(f"Not enough data for {stock} to create train/validation sequences. Skipping.")
+            continue
 
         model = Sequential([
             Input(shape=(X_train.shape[1], X_train.shape[2])),
-            LSTM(units=50, return_sequences=True),
-            LSTM(units=50, return_sequences=False),
-            Dense(units=25),
-            # --- CRITICAL FIX: Add a Softplus activation to the final layer ---
-            # This constrains the model's output to be non-negative, preventing negative price predictions.
-            Dense(units=1, activation='softplus')
+            LSTM(units=64, return_sequences=True, activation='tanh', kernel_regularizer=l2(0.001)),
+            Dropout(0.3),
+            LSTM(units=32, return_sequences=False, activation='tanh', kernel_regularizer=l2(0.001)),
+            Dropout(0.3),
+            Dense(units=25, activation='relu'),
+            BatchNormalization(),
+            Dense(units=1)
         ])
-        model.compile(optimizer='adam', loss='mean_squared_error')
-        model.fit(X_train, y_train, batch_size=32, epochs=20, verbose=0)
+        
+        optimizer = Adam(learning_rate=0.001)
+        model.compile(optimizer=optimizer, loss='mean_squared_error')
+        
+        early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+        
+        model.fit(
+            X_train, y_train, 
+            validation_data=(X_val, y_val),
+            batch_size=32, 
+            epochs=100,
+            callbacks=[early_stopping],
+            verbose=1
+        )
         
         model.save(model_path)
-        print(f"LSTM model for {stock} saved successfully.")
-
-        train_and_save_arima(stock_df, stock, model_dir)
-
+        print(f"Model and scaler for {stock} saved successfully.")
 
 def run_model_training(config):
     build_and_train_model(config)
+
