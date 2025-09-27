@@ -2,9 +2,6 @@
 pandas==2.2.2
 numpy==1.26.4
 
-# For Implementing ARIMA model
-statsmodels==0.14.2
-
 # For fetching financial data
 yfinance==0.2.37 #changed from 0.2.25 to 0.2.37
 
@@ -21,7 +18,9 @@ tqdm==4.66.4
 newsapi-python==0.2.7
 
 # For Natural Language Processing for sentiment analysis
-vaderSentiment==3.3.2
+transformers==4.56.2
+torch==2.8.0
+hf_xet==1.1.10
 scikit-learn==1.5.1
 
 # Deep Learning framework for the LSTM model

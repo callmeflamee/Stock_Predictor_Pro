@@ -1,7 +1,6 @@
 import configparser
 import sys
 import os
-import shutil # --- NEW: Import for deleting directories ---
 
 # Add the 'src' directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
@@ -28,17 +27,17 @@ def main():
     
     # Step 1: Data Collection
     print("\n--- Step 1: Starting Data Collection ---")
-    #run_data_collection(config)
+    run_data_collection(config)
     print("\n--- Data Collection Finished ---")
 
     # Step 2: Data Processing
     print("\n--- Step 2: Starting Data Processing & Sentiment Analysis ---")
-    #run_data_processing(config)
+    run_data_processing(config)
     print("\n--- Data Processing Finished ---")
 
     # Step 3: Model Training
     print("\n--- Step 3: Starting Model Training ---")
-    #run_model_training(config)
+    run_model_training(config)
     print("\n--- Model Training Finished ---")
     
     # Step 4: Prediction Generation

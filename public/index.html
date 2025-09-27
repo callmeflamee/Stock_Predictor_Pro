@@ -5,18 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Predictor Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- NEW: Import the Anime.js animation library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="p-4 md:p-6 lg:p-8">
-
-    <!-- NEW: Loading Screen Overlay -->
     <div id="loading-overlay" class="loading-overlay">
         <div class="loading-content">
             <svg id="loading-animation" class="loading-svg" viewBox="0 0 100 40">
@@ -28,7 +23,7 @@
 
     <header class="text-center mb-6 flex-shrink-0">
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold header-title">Stock Predictor Pro</h1>
-        <p class="text-md md:text-lg header-subtitle mt-2">Hybrid ARIMA-LSTM & Sentiment Analysis Driven Stock Predictions</p>
+        <p class="text-md md:text-lg header-subtitle mt-2">LSTM & Sentiment Analysis Driven Stock Predictions</p>
     </header>
 
     <main>
@@ -57,15 +52,16 @@
                     <h2 class="text-xl font-semibold text-white mb-4">Market Sentiment Summary</h2>
                     <p id="sentimentSummary" class="text-gray-400">Select a stock to see the summary.</p>
                     <p class="text-xs text-gray-500 mt-4 italic">
-                        Note: The AI summary reflects public sentiment. The price prediction is based on a hybrid model and may differ.
+                        Note: The AI summary reflects public sentiment. The price prediction is based on historical price trends and may differ.
                     </p>
                 </div>
                 <div class="card p-6 flex-shrink-0">
                     <h2 class="text-xl font-semibold text-white mb-4">Prediction Details</h2>
                     <ul class="space-y-3">
                         <li class="flex justify-between"><span>Last Actual Price:</span><span id="lastActualPrice" class="font-medium text-white">-</span></li>
-                        <li class="flex justify-between"><span>Next Day (Hybrid):</span><span id="predictedNextDayPrice" class="font-medium text-white">-</span></li>
-                        <li class="flex justify-between"><span>30-Day Trend (LSTM):</span><span id="trendPrediction" class="font-medium text-white">-</span></li>
+                        <!-- UPDATED LABELS -->
+                        <li class="flex justify-between"><span>Predicted Next Day:</span><span id="predictedNextDayPrice" class="font-medium text-white">-</span></li>
+                        <li class="flex justify-between"><span>30-Day Trend:</span><span id="trendPrediction" class="font-medium text-white">-</span></li>
                         <li class="border-t border-gray-700 pt-3 mt-3 flex justify-between"><span>Directional Accuracy:</span><span id="directionalAccuracy" class="font-medium text-white">-</span></li>
                         <li class="flex justify-between"><span>Avg. Price Error (MAPE):</span><span id="mape" class="font-medium text-white">-</span></li>
                     </ul>

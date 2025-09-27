@@ -9,16 +9,32 @@ import configparser
 import sys
 import time
 
-# Use a basic logger for cleaner output
-logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(message)s')
+# --- DEFINITIVE LOGGING FIX ---
+# Get the root logger, which is the parent of all other loggers
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.INFO)  # Set the default level for our script
+
+# Remove any handlers that may have been added by imported libraries
+for handler in root_logger.handlers[:]:
+    root_logger.removeHandler(handler)
+
+# Create our own clean handler to print messages to the console
+handler = logging.StreamHandler(sys.stdout)
+formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(message)s')
+handler.setFormatter(formatter)
+root_logger.addHandler(handler)
+
+# Now, specifically silence the noisy library loggers by raising their threshold
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+logging.getLogger("twscrape").setLevel(logging.WARNING)
+
 
 async def scrape_tweets(api: API, stock: str, limit: int, since: str, until: str) -> list:
     """
     Scrapes tweets for a given stock, with a random initial delay.
     """
-    initial_delay = random.uniform(1, 5)
-    logging.info(f"Scraper for ${stock} starting after a {initial_delay:.2f} second delay...")
-    await asyncio.sleep(initial_delay)
+
 
     tweets_list = []
     search_query = f"({stock} OR ${stock}) lang:en since:{since} until:{until} -is:retweet"
@@ -46,8 +62,7 @@ async def main_scrape():
     today = date.today()
     today_str = today.strftime('%Y-%m-%d')
 
-    # --- NEW: More robust logic for determining the start date ---
-    # Default to a 7-day lookback if no data exists
+    # --- More robust logic for determining the start date ---
     tweet_since_date = (today - timedelta(days=7)).strftime('%Y-%m-%d')
     
     if os.path.exists(raw_tweet_path):
@@ -58,8 +73,6 @@ async def main_scrape():
                 if last_tweet_date >= today:
                     print("Tweet data is already up to date. Exiting.")
                     return
-                # --- CRITICAL FIX: Create a 3-day overlapping window ---
-                # This makes the scrape resilient to days with low tweet volume.
                 tweet_since_date = (last_tweet_date - timedelta(days=2)).strftime('%Y-%m-%d')
         except (pd.errors.EmptyDataError, KeyError):
             final_tweet_df = pd.DataFrame(columns=["stock", "date", "text"])
@@ -73,7 +86,7 @@ async def main_scrape():
     
     # --- IMPORTANT: Re-add your accounts ONE TIME if the DB is fresh or corrupted ---
     # await api.pool.add_account("user1", "pass1", "email1", "email_pass1")
-    
+    await api.pool.add_account("mrizzler7@gmail.com", "mrizzler1769", "mrizzler7@gmail.com", "--manual")
     await api.pool.login_all()
     
     active_accounts = [acc for acc in await api.pool.get_all() if acc.active]
