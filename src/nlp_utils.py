@@ -31,22 +31,21 @@ def generate_dynamic_summary(stock: str, raw_tweet_df: pd.DataFrame, raw_news_df
 
     # --- 2. Process News Data ---
     news_context = "No recent news headlines found."
-    if not raw_news_df.empty:
-        # The news fetcher already returns daily sentiment, but we need the raw headlines for the summary.
-        # This assumes a more complete news_fetcher in a future version.
-        # For now, we'll simulate having the headlines.
-        # In a real scenario, you'd save headlines to news_data.csv as well.
-        # This part is a placeholder to show the logic.
-        # Let's assume raw_news_df has a 'title' column.
-        if 'title' in raw_news_df.columns:
-             raw_news_df['date'] = pd.to_datetime(raw_news_df['date'], errors='coerce').dt.tz_localize(None)
-             stock_news = raw_news_df[(raw_news_df['stock'] == stock) & (raw_news_df['date'] >= seven_days_ago)]
-             if not stock_news.empty:
-                 news_text = "\n".join("- " + str(title) for title in stock_news.nlargest(10, 'date')['title'])
-                 news_context = f"Recent News Headlines:\n---\n{news_text}\n---"
-        else:
-             news_context = "News headlines not available in the current data format."
-
+    if not raw_news_df.empty and 'title' in raw_news_df.columns:
+        raw_news_df['date'] = pd.to_datetime(raw_news_df['date'], errors='coerce').dt.tz_localize(None)
+        seven_days_ago = pd.Timestamp.now().tz_localize(None) - pd.Timedelta(days=7)
+        stock_news = raw_news_df[(raw_news_df['stock'] == stock) & (raw_news_df['date'] >= seven_days_ago) & (raw_news_df['title'].notna())]
+        
+        if not stock_news.empty:
+            # --- OPTIMIZATION: Correctly parse aggregated titles ---
+            # Combine all title strings from the last 7 days.
+            all_titles_str = ' || '.join(stock_news['title'])
+            # Split the combined string and get unique, non-empty titles.
+            unique_titles = list(pd.unique([title.strip() for title in all_titles_str.split('||') if title.strip()]))
+            
+            # Use the most recent unique titles for the summary.
+            news_text = "\n".join("- " + title for title in unique_titles[:15])
+            news_context = f"Recent News Headlines:\n---\n{news_text}\n---"
 
     # --- 3. Construct the Combined Prompt ---
     prompt = f"""
@@ -75,4 +74,3 @@ def generate_dynamic_summary(stock: str, raw_tweet_df: pd.DataFrame, raw_news_df
         summary = f"AI summary generation for {stock} failed."
 
     return summary
-
