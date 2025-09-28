@@ -44,25 +44,30 @@ An environment manager like pip or conda.
 NVIDIA GPU with CUDA Toolkit and cuDNN installed (for GPU acceleration).
 
 1. Clone the Repository
+'''bash
 git clone [https://github.com/your-username/stock-predictor-pro.git](https://github.com/your-username/stock-predictor-pro.git)
 cd stock-predictor-pro
-
+'''
 2. Set Up a Virtual Environment
 It's highly recommended to use a virtual environment to manage dependencies.
 
 # For Windows
+'''bash
 python -m venv venv
 .\venv\Scripts\activate
+'''
 
 # For macOS/Linux
+'''bash
 python3 -m venv venv
 source venv/bin/activate
+'''
 
 3. Install Dependencies
 Install all the required Python packages from the requirements.txt file.
-
+'''bash
 pip install -r requirements.txt
-
+'''
 (Note: You may need to create a requirements.txt file by running pip freeze > requirements.txt in your terminal.)
 
 4. Set Up API Keys
@@ -71,11 +76,12 @@ You will need API keys for NewsAPI and Google Gemini.
 Create a file named .env in the root directory of the project.
 
 Add your API keys to this file as follows:
-
+'''
 NEWS_API_KEY="YOUR_NEWS_API_KEY_HERE"
 GOOGLE_API_KEY="YOUR_GEMINI_API_KEY_HERE"
+'''
 
-5. Download the FinBERT Model (Offline Use)
+5. (Optional) Download the FinBERT Model (Offline Use)
 To ensure the application runs smoothly without relying on an internet connection for the model, download the FinBERT files manually:
 
 Go to the ProsusAI/finbert model page on Hugging Face.
@@ -94,8 +100,9 @@ The entire pipeline is orchestrated by main.py.
 Configure Your Stocks: Open config.ini and list the stock tickers you want to analyze (e.g., stocks = AAPL,GOOGL,TSLA,NVDA).
 
 Run the Pipeline: Execute the main script from the root directory.
-
+'''bash
 python main.py
+'''
 
 The script will perform all four steps automatically:
 
@@ -109,6 +116,7 @@ Step 4: Generate 30-day predictions.
 
 View the Results: Once the pipeline is complete, open the public/index.html file in your web browser to see the interactive dashboard.
 
+'''
 📂 Project Structure
 .
 ├── public/
@@ -127,6 +135,7 @@ View the Results: Once the pipeline is complete, open the public/index.html file
 ├── config.ini            # Main configuration for stocks and paths
 ├── main.py               # Orchestrator script to run the full pipeline
 └── README.md             # This file
+'''
 
 📄 License
 This project is licensed under the MIT License. See the LICENSE file for details.
