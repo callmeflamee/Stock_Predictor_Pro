@@ -4,7 +4,7 @@ import os
 
 def generate_dynamic_summary(stock: str, raw_tweet_df: pd.DataFrame, raw_news_df: pd.DataFrame):
     """
-    Analyzes recent tweets AND news headlines using the Gemini API to generate a
+    Analyzes recent news headlines using the Gemini API to generate a
     high-quality, comprehensive summary.
     """
     api_key = os.getenv("GOOGLE_API_KEY")
@@ -14,46 +14,47 @@ def generate_dynamic_summary(stock: str, raw_tweet_df: pd.DataFrame, raw_news_df
     
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        # --- FIX: Updated model name to the latest stable version ---
+        model = genai.GenerativeModel('gemini-1.5-flash-latest')
     except Exception as e:
         print(f"Error configuring Gemini API: {e}")
         return "Failed to initialize the AI model. Please check your API key."
 
-    # --- 1. Process Tweet Data ---
-    tweets_context = "No recent tweets found."
-    if not raw_tweet_df.empty:
-        raw_tweet_df['date'] = pd.to_datetime(raw_tweet_df['date'], errors='coerce').dt.tz_localize(None)
-        seven_days_ago = pd.Timestamp.now().tz_localize(None) - pd.Timedelta(days=7)
-        stock_tweets = raw_tweet_df[(raw_tweet_df['stock'] == stock) & (raw_tweet_df['date'] >= seven_days_ago)]
-        if not stock_tweets.empty:
-            tweets_text = "\n".join("- " + str(text) for text in stock_tweets.nlargest(20, 'date')['text'])
-            tweets_context = f"Recent Tweets:\n---\n{tweets_text}\n---"
-
-    # --- 2. Process News Data ---
+    # --- Process News Data ---
     news_context = "No recent news headlines found."
     if not raw_news_df.empty and 'title' in raw_news_df.columns:
-        raw_news_df['date'] = pd.to_datetime(raw_news_df['date'], errors='coerce').dt.tz_localize(None)
-        seven_days_ago = pd.Timestamp.now().tz_localize(None) - pd.Timedelta(days=7)
-        stock_news = raw_news_df[(raw_news_df['stock'] == stock) & (raw_news_df['date'] >= seven_days_ago) & (raw_news_df['title'].notna())]
+        # The news_fetcher now aggregates titles into a list for each day.
+        # We need to flatten this list for the prompt.
         
+        # Ensure 'date' is in datetime format for proper sorting
+        raw_news_df['date'] = pd.to_datetime(raw_news_df['date'], errors='coerce')
+        
+        # Filter for the specific stock and the last 7 days
+        seven_days_ago = pd.Timestamp.now() - pd.Timedelta(days=7)
+        stock_news = raw_news_df[
+            (raw_news_df['stock'] == stock) & 
+            (raw_news_df['date'] >= seven_days_ago)
+        ].copy()
+
         if not stock_news.empty:
-            # --- OPTIMIZATION: Correctly parse aggregated titles ---
-            # Combine all title strings from the last 7 days.
-            all_titles_str = ' || '.join(stock_news['title'])
-            # Split the combined string and get unique, non-empty titles.
-            unique_titles = list(pd.unique([title.strip() for title in all_titles_str.split('||') if title.strip()]))
+            # Flatten the list of lists of titles
+            all_titles = [title for sublist in stock_news['title'] for title in sublist]
             
-            # Use the most recent unique titles for the summary.
-            news_text = "\n".join("- " + title for title in unique_titles[:15])
+            # Get unique titles while preserving order (to some extent)
+            unique_titles = list(pd.unique([title.strip() for title in all_titles if title.strip()]))
+
+            # Take the most recent 20 unique headlines for the prompt
+            news_text = "\n".join("- " + title for title in unique_titles[:20])
             news_context = f"Recent News Headlines:\n---\n{news_text}\n---"
+    else:
+         news_context = "News headlines not available in the current data format."
 
-    # --- 3. Construct the Combined Prompt ---
+
+    # --- Construct the Prompt ---
     prompt = f"""
-    As a neutral financial analyst, analyze the following recent social media posts and news headlines about ${stock}.
+    As a neutral financial analyst, analyze the following recent news headlines about ${stock}.
     Provide a concise, well-rounded summary (strictly 2-3 sentences, maximum 4 lines) of the key themes, catalysts, and overall market sentiment.
-    Synthesize information from both sources if available. Do not use hashtags or promotional language.
-
-    {tweets_context}
+    Do not use hashtags or promotional language.
 
     {news_context}
 
@@ -74,3 +75,4 @@ def generate_dynamic_summary(stock: str, raw_tweet_df: pd.DataFrame, raw_news_df
         summary = f"AI summary generation for {stock} failed."
 
     return summary
+
