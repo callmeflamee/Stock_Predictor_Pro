@@ -9,10 +9,27 @@ from keras.regularizers import l2
 from keras.optimizers import Adam
 import os
 import json
+# --- NEW: Import TensorFlow to check for GPUs ---
+import tensorflow as tf
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 def build_and_train_model(config):
+    # --- NEW: Check for available GPUs and configure them ---
+    gpus = tf.config.list_physical_devices('GPU')
+    if gpus:
+        try:
+            # Set memory growth to prevent TensorFlow from allocating all GPU memory at once
+            for gpu in gpus:
+                tf.config.experimental.set_memory_growth(gpu, True)
+            logical_gpus = tf.config.list_logical_devices('GPU')
+            print(f"TensorFlow is using {len(gpus)} Physical GPUs, {len(logical_gpus)} Logical GPUs.")
+        except RuntimeError as e:
+            # Memory growth must be set before GPUs have been initialized
+            print(e)
+    else:
+        print("TensorFlow did not find any GPUs. Model training will run on CPU.")
+
     data_config = config['Data'] if 'Data' in config else {}
     model_config = config['Model'] if 'Model' in config else {}
 
@@ -35,7 +52,6 @@ def build_and_train_model(config):
         model_path = os.path.join(model_dir, f'{stock}_model.keras')
         params_path = os.path.join(model_dir, f'{stock}_scaling_params.json')
 
-        # --- OPTIMIZATION: Check if retraining is necessary ---
         if os.path.exists(model_path):
             model_mod_time = os.path.getmtime(model_path)
             data_mod_time = os.path.getmtime(processed_data_path)
