@@ -2,12 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Element Selectors ---
     const loadingOverlay = document.getElementById('loading-overlay');
     const loadingText = document.getElementById('loading-text');
-    const searchInput = document.getElementById('stockSearchInput');
-    const dropdownList = document.getElementById('stockDropdownList');
+    const stockSelector = document.getElementById('stockSelector');
     const initialMessage = document.getElementById('initialMessage');
     const loader = document.getElementById('loader');
     const errorMessage = document.getElementById('errorMessage');
-    const chartFrame = document.getElementById('predictionChartFrame');
+    const chartDiv = document.getElementById('predictionChart');
+    const timeRangeButtons = document.getElementById('timeRangeButtons');
     const sentimentSummary = document.getElementById('sentimentSummary');
     const lastActualPriceElem = document.getElementById('lastActualPrice');
     const predictedNextDayPriceElem = document.getElementById('predictedNextDayPrice');
@@ -16,11 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const mapeElem = document.getElementById('mape');
     
     let allStocks = [];
+    let currentStockData = null;
     const dataCache = new Map();
 
     // --- Core Functions ---
     function startLoadingAnimation() {
         const path = document.querySelector('#loading-animation path');
+        if (!path) return;
         const length = path.getTotalLength();
         path.style.strokeDasharray = length;
         path.style.strokeDashoffset = length;
@@ -35,17 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function preloadTopStocks() {
+    async function initializeApp() {
         try {
             loadingText.textContent = 'Loading available stocks...';
             const manifestResponse = await fetch('./predictions/manifest.json');
             if (!manifestResponse.ok) throw new Error('Manifest file not found.');
             allStocks = await manifestResponse.json();
             
-            const stocksToPreload = allStocks.slice(0, 10);
-            loadingText.textContent = `Caching data for ${stocksToPreload.length} top stocks...`;
+            populateDropdown(allStocks);
+            
+            const stocksToPreload = allStocks.slice(0, 5);
+            loadingText.textContent = `Caching data for top stocks...`;
 
-            const cachingPromise = Promise.all(
+            await Promise.all(
                 stocksToPreload.map(stock =>
                     fetch(`./predictions/${stock}_prediction.json`)
                         .then(res => res.json())
@@ -53,58 +57,46 @@ document.addEventListener('DOMContentLoaded', () => {
                         .catch(err => console.error(`Failed to cache ${stock}:`, err))
                 )
             );
-            const timerPromise = new Promise(resolve => setTimeout(resolve, 3000));
-            await Promise.all([cachingPromise, timerPromise]);
+            
+            await new Promise(resolve => setTimeout(resolve, 1500));
 
             loadingText.textContent = 'Initialization complete!';
             loadingOverlay.classList.add('hidden');
             
-            renderDropdownList(allStocks);
-            searchInput.disabled = false;
-            searchInput.placeholder = `Search or select from ${allStocks.length} stocks...`;
-
+            stockSelector.disabled = false;
         } catch (error) {
             loadingText.textContent = `Error: ${error.message}`;
-            console.error("Failed to preload data:", error);
+            console.error("Failed to initialize app:", error);
         }
     }
 
-
-    function renderDropdownList(stocks) {
-        dropdownList.innerHTML = '';
-        if (stocks.length === 0) {
-            dropdownList.innerHTML = '<div class="dropdown-item text-gray-500">No stocks found</div>';
-        }
+    function populateDropdown(stocks) {
+        stockSelector.innerHTML = '<option value="" disabled selected>Select a stock...</option>';
         stocks.forEach(stock => {
-            const item = document.createElement('div');
-            item.className = 'dropdown-item';
-            item.textContent = stock;
-            item.dataset.stock = stock;
-            dropdownList.appendChild(item);
+            const option = document.createElement('option');
+            option.value = stock;
+            option.textContent = stock;
+            stockSelector.appendChild(option);
         });
     }
 
     async function loadPredictionData(stock) {
+        if (!stock) return;
         resetUI();
-        initialMessage.style.display = 'none';
-
+        
         if (dataCache.has(stock)) {
-            const data = dataCache.get(stock);
-            updateDetails(data);
-            chartFrame.src = `./predictions/${stock}_chart.html`;
-            chartFrame.classList.remove('hidden');
+            currentStockData = dataCache.get(stock);
+            renderAllComponents(currentStockData);
             return;
         }
 
         loader.style.display = 'flex';
         try {
             const dataResponse = await fetch(`./predictions/${stock}_prediction.json`);
-            if (!dataResponse.ok) throw new Error(`Prediction JSON for ${stock} not found.`);
-            const data = await dataResponse.json();
-            dataCache.set(stock, data);
-            updateDetails(data);
-            chartFrame.src = `./predictions/${stock}_chart.html`;
-            chartFrame.classList.remove('hidden');
+            if (!dataResponse.ok) throw new Error(`Prediction data for ${stock} not found.`);
+            currentStockData = await dataResponse.json();
+            dataCache.set(stock, currentStockData);
+            renderAllComponents(currentStockData);
         } catch (error) {
             displayError(error.message);
         } finally {
@@ -112,13 +104,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    function renderAllComponents(data) {
+        initialMessage.style.display = 'none';
+        
+        chartDiv.classList.remove('hidden');
+        timeRangeButtons.classList.remove('hidden');
+
+        updateDetails(data);
+        drawChart(data);
+    }
+
     function updateDetails(data) {
         sentimentSummary.textContent = data.summary || 'N/A';
         
         const lastActual = data.historical && data.historical.length > 0 ? data.historical[data.historical.length - 1].close : null;
         lastActualPriceElem.textContent = lastActual !== null ? `$${lastActual.toFixed(2)}` : 'N/A';
         
-        // --- UPDATED: Use the new, simpler prediction field ---
         const nextDayPred = data.next_day_prediction;
         predictedNextDayPriceElem.textContent = nextDayPred !== null && nextDayPred !== undefined ? `$${nextDayPred.toFixed(2)}` : 'N/A';
 
@@ -141,14 +142,137 @@ document.addEventListener('DOMContentLoaded', () => {
             mapeElem.textContent = 'N/A';
         }
     }
+
+    function drawChart(data) {
+        const historical = data.historical;
+        const predictions = data.predictions;
+
+        const trace1 = {
+            x: historical.map(d => d.date),
+            open: historical.map(d => d.open),
+            high: historical.map(d => d.high),
+            low: historical.map(d => d.low),
+            close: historical.map(d => d.close),
+            type: 'candlestick',
+            name: 'Historical Price',
+            increasing: { line: { color: '#22c55e' } },
+            decreasing: { line: { color: '#d20f39' } }
+        };
+        
+        const lastHistoricalDate = historical.length > 0 ? historical[historical.length - 1].date : new Date().toISOString().split('T')[0];
+        const lastHistoricalClose = historical.length > 0 ? historical[historical.length - 1].close : null;
+
+        const trace2 = {
+            x: [lastHistoricalDate, ...predictions.map(d => d.date)],
+            y: [lastHistoricalClose, ...predictions.map(d => d.predicted_close)],
+            mode: 'lines+markers',
+            name: 'Predicted Trend',
+            // --- UPDATED: Added glow effect and improved tooltip ---
+            line: { 
+                color: '#ea76cb', 
+                width: 2.5,
+                shape: 'spline', // Smoother line
+                shadow: { // Glow effect
+                    color: '#ea76cb',
+                    width: 8,
+                    blur: 4
+                }
+            },
+            marker: { size: 4 },
+            hovertemplate: '<b>Predicted Price</b><br>%{x|%b %d, %Y}<br>$%{y:.2f}<extra></extra>',
+            hoverlabel: {
+                bgcolor: '#ea76cb',
+                font: { color: '#000000' }
+            }
+        };
+
+        const allDates = [...historical.map(d => d.date), ...predictions.map(d => d.date)];
+        const endDate = allDates.length > 0 ? new Date(Math.max.apply(null, allDates.map(d => new Date(d)))) : new Date();
+        const startDate = new Date(endDate);
+        startDate.setMonth(endDate.getMonth() - 6);
+
+        const layout = {
+            title: `<b>${data.stock} Price Prediction</b>`,
+            xaxis: { 
+                title: 'Date',
+                rangeslider: { visible: false },
+                type: 'date',
+                range: [startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0]]
+            },
+            yaxis: { 
+                title: 'Price (USD)',
+                autorange: true 
+            },
+            template: 'plotly_dark',
+            paper_bgcolor: '#161b22',
+            plot_bgcolor: '#161b22',
+            font: { color: '#c9d1d9', family: 'Inter, sans-serif' },
+            legend: {
+                orientation: 'h',
+                yanchor: 'bottom',
+                y: 1.02,
+                xanchor: 'right',
+                x: 1
+            },
+            margin: { l: 60, r: 20, t: 60, b: 50 }
+        };
+
+        Plotly.newPlot(chartDiv, [trace1, trace2], layout, {responsive: true});
+        
+        document.querySelectorAll('.time-range-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.range === '6M');
+        });
+    }
+
+    function updateChartRange(range) {
+        if (!currentStockData || !chartDiv.data) return;
+
+        const allDates = [...currentStockData.historical.map(d => d.date), ...currentStockData.predictions.map(d => d.date)];
+        if (allDates.length === 0) return;
+        
+        const endDate = new Date(Math.max.apply(null, allDates.map(d => new Date(d))));
+        let startDate;
+
+        switch(range) {
+            case '6M':
+                startDate = new Date(endDate);
+                startDate.setMonth(endDate.getMonth() - 6);
+                break;
+            case '1Y':
+                startDate = new Date(endDate);
+                startDate.setFullYear(endDate.getFullYear() - 1);
+                break;
+            case '2Y':
+                startDate = new Date(endDate);
+                startDate.setFullYear(endDate.getFullYear() - 2);
+                break;
+            case '3Y':
+                startDate = new Date(endDate);
+                startDate.setFullYear(endDate.getFullYear() - 3);
+                break;
+        }
+
+        Plotly.update(chartDiv, {}, {
+            'xaxis.range': [startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0]],
+            'yaxis.autorange': true
+        });
+
+        document.querySelectorAll('.time-range-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.range === range);
+        });
+    }
+
     function displayError(message) {
         errorMessage.textContent = `Error: ${message}.`;
         errorMessage.style.display = 'block';
-        chartFrame.classList.add('hidden');
+        chartDiv.classList.add('hidden');
+        timeRangeButtons.classList.add('hidden');
     }
+
     function resetUI() {
-        chartFrame.src = 'about:blank';
-        chartFrame.classList.add('hidden');
+        chartDiv.innerHTML = '';
+        chartDiv.classList.add('hidden');
+        timeRangeButtons.classList.add('hidden');
         errorMessage.style.display = 'none';
         loader.style.display = 'none';
         initialMessage.style.display = 'flex';
@@ -156,27 +280,24 @@ document.addEventListener('DOMContentLoaded', () => {
         lastActualPriceElem.textContent = '-';
         predictedNextDayPriceElem.textContent = '-';
         trendPredictionElem.textContent = '-';
-        trendPredictionElem.className = 'font-medium text-white';
+        trendPredictionElem.className = 'font-medium';
         directionalAccuracyElem.textContent = '-';
         mapeElem.textContent = '-';
     }
-    searchInput.addEventListener('focus', () => { dropdownList.classList.remove('hidden'); renderDropdownList(allStocks); });
-    searchInput.addEventListener('keyup', () => {
-        const filter = searchInput.value.toUpperCase();
-        const filteredStocks = allStocks.filter(stock => stock.toUpperCase().startsWith(filter));
-        renderDropdownList(filteredStocks);
+
+    // --- Event Listeners ---
+    stockSelector.addEventListener('change', (e) => {
+        loadPredictionData(e.target.value);
     });
-    dropdownList.addEventListener('click', (e) => {
-        if (e.target && e.target.classList.contains('dropdown-item')) {
-            const selectedStock = e.target.dataset.stock;
-            searchInput.value = selectedStock;
-            dropdownList.classList.add('hidden');
-            loadPredictionData(selectedStock);
+
+    timeRangeButtons.addEventListener('click', (e) => {
+        if (e.target.classList.contains('time-range-btn')) {
+            updateChartRange(e.target.dataset.range);
         }
     });
-    document.addEventListener('click', (e) => { if (!searchInput.contains(e.target) && !dropdownList.contains(e.target)) { dropdownList.classList.add('hidden'); } });
     
+    // --- App Initialization ---
     startLoadingAnimation();
-    preloadTopStocks();
+    initializeApp();
 });
 

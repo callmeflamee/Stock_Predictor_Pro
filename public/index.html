@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Predictor Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,38 +29,46 @@
 
     <main>
         <div class="card p-4 mb-6 flex-shrink-0">
-            <label for="stockSearchInput" class="block text-sm font-medium mb-2">Select a Stock:</label>
-            <div class="searchable-dropdown">
-                <input type="text" id="stockSearchInput" class="search-input" placeholder="Search or select a stock..." disabled>
-                <div id="stockDropdownList" class="dropdown-list hidden"></div>
-            </div>
+            <label for="stockSelector" class="block text-sm font-medium mb-2">Select a Stock:</label>
+            <select id="stockSelector" class="stock-selector" disabled>
+                <option value="" disabled selected>Loading stocks...</option>
+            </select>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 flex-grow overflow-hidden">
-            <div class="lg:col-span-2 card p-4 md:p-6 flex flex-col overflow-hidden">
+            <!-- --- FIX: Added min-h-0 to ensure proper flex-grow behavior in Firefox/Safari --- -->
+            <div class="lg:col-span-2 card p-4 md:p-6 flex flex-col overflow-hidden min-h-0">
                 <div id="initialMessage" class="flex flex-col items-center justify-center h-full text-gray-500 text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-gray-600 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
                     <p>Please select a stock to view the prediction chart.</p>
                 </div>
                 <div id="loader" class="hidden items-center justify-center h-full">
                     <div class="loader"></div>
                 </div>
-                <iframe id="predictionChartFrame" class="hidden w-full flex-grow border-0 rounded-lg"></iframe>
+                <!-- Chart will be rendered here by Plotly.js -->
+                <div id="predictionChart" class="hidden flex-grow w-full h-full"></div>
                 <div id="errorMessage" class="hidden text-red-400 p-4 bg-red-900/20 rounded-lg"></div>
+                 <!-- --- UPDATED: Centered buttons with new options --- -->
+                <div id="timeRangeButtons" class="hidden flex justify-center items-center space-x-2 pt-4 flex-shrink-0">
+                    <button class="time-range-btn" data-range="6M">6M</button>
+                    <button class="time-range-btn" data-range="1Y">1Y</button>
+                    <button class="time-range-btn" data-range="2Y">2Y</button>
+                    <button class="time-range-btn" data-range="3Y">3Y</button>
+                </div>
             </div>
 
             <div class="flex flex-col space-y-6 lg:space-y-8 overflow-y-auto" id="side-panel">
                 <div class="card p-6 flex-shrink-0">
                     <h2 class="text-xl font-semibold text-white mb-4">Market Sentiment Summary</h2>
-                    <p id="sentimentSummary" class="text-gray-400">Select a stock to see the summary.</p>
+                    <p id="sentimentSummary" class="text-gray-400 summary-text">Select a stock to see the summary.</p>
                     <p class="text-xs text-gray-500 mt-4 italic">
-                        Note: The AI summary reflects public sentiment. The price prediction is based on historical price trends and may differ.
+                        Note: AI summary is based on recent public sentiment.
                     </p>
                 </div>
                 <div class="card p-6 flex-shrink-0">
                     <h2 class="text-xl font-semibold text-white mb-4">Prediction Details</h2>
                     <ul class="space-y-3">
                         <li class="flex justify-between"><span>Last Actual Price:</span><span id="lastActualPrice" class="font-medium text-white">-</span></li>
-                        <!-- UPDATED LABELS -->
                         <li class="flex justify-between"><span>Predicted Next Day:</span><span id="predictedNextDayPrice" class="font-medium text-white">-</span></li>
                         <li class="flex justify-between"><span>30-Day Trend:</span><span id="trendPrediction" class="font-medium text-white">-</span></li>
                         <li class="border-t border-gray-700 pt-3 mt-3 flex justify-between"><span>Directional Accuracy:</span><span id="directionalAccuracy" class="font-medium text-white">-</span></li>
@@ -73,7 +82,7 @@
         </div>
     </main>
     
-    <script src="script.js" defer></script>
+    <script src="script.js"></script>
 </body>
 </html>
 

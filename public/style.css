@@ -86,9 +86,8 @@ main {
     color: var(--text-secondary);
 }
 
-/* Searchable Dropdown Styles */
-.searchable-dropdown { position: relative; }
-.search-input {
+/* --- NEW: Stock Selector Dropdown Styles --- */
+.stock-selector {
     background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
     color: var(--text-primary);
@@ -96,32 +95,44 @@ main {
     padding: 0.65rem;
     border-radius: 0.5rem;
     cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23c9d1d9%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 0.65em auto;
+    padding-right: 2.5rem; /* Make space for the arrow */
 }
-.search-input:focus {
+
+.stock-selector:focus {
     outline: none;
     border-color: var(--accent-primary);
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-primary) 30%, transparent);
 }
-.dropdown-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: var(--bg-secondary);
+
+/* --- NEW: Time Range Button Styles --- */
+.time-range-btn {
+    background-color: transparent;
     border: 1px solid var(--border-color);
-    border-top: none;
-    border-radius: 0 0 0.5rem 0.5rem;
-    max-height: 250px;
-    overflow-y: auto;
-    z-index: 10;
-    margin-top: 2px;
+    color: var(--text-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease-in-out;
 }
-.dropdown-item {
-    padding: 0.75rem 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+
+.time-range-btn:hover {
+    background-color: var(--highlight-bg);
+    color: var(--text-primary);
 }
-.dropdown-item:hover { background-color: var(--highlight-bg); }
+
+.time-range-btn.active {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+    font-weight: 500;
+}
 
 /* Loader animation */
 .loader {
@@ -134,29 +145,14 @@ main {
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* --- FIX: More robust line-clamping for the summary text --- */
-.summary-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 4; /* Strictly enforce 4 lines */
-    line-clamp: 4; /* Standard property for compatibility */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.6; /* Use a slightly larger line-height for readability */
-    max-height: calc(1.6 * 4em); /* line-height * number of lines */
-}
-
 /* Custom Scrollbar */
-#side-panel::-webkit-scrollbar, .dropdown-list::-webkit-scrollbar { width: 8px; }
-#side-panel::-webkit-scrollbar-track, .dropdown-list::-webkit-scrollbar-track { background: var(--bg-secondary); }
-#side-panel::-webkit-scrollbar-thumb, .dropdown-list::-webkit-scrollbar-thumb {
-    /* --- FIX: Use the primary accent color for the scrollbar thumb --- */
+#side-panel::-webkit-scrollbar { width: 8px; }
+#side-panel::-webkit-scrollbar-track { background: var(--bg-secondary); }
+#side-panel::-webkit-scrollbar-thumb {
     background-color: var(--accent-primary);
     border-radius: 10px;
     border: 2px solid var(--bg-secondary);
 }
-#side-panel::-webkit-scrollbar-thumb:hover, .dropdown-list::-webkit-scrollbar-thumb:hover {
-    /* Use a slightly lighter version on hover */
+#side-panel::-webkit-scrollbar-thumb:hover {
     background-color: var(--accent-secondary);
 }
-
