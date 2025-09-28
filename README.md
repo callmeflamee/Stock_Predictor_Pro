@@ -1,9 +1,11 @@
-Stock Predictor Pro 📈
+#            Stock Predictor Pro 📈
+
 Stock Predictor Pro is a comprehensive Python-based application that leverages machine learning and natural language processing to forecast stock prices. By analyzing historical price data, technical indicators, and real-time market sentiment from news headlines, it trains unique LSTM models for each stock to provide a 30-day price prediction. The results are displayed in a clean, interactive web dashboard.
 
 This project was developed as an academic exploration into the application of modern AI techniques in financial forecasting.
 
-✨ Features
+---
+✨ **Features**
 Automated Data Pipeline: Intelligently collects and updates stock prices (from Yahoo Finance) and news data (from NewsAPI) on a per-stock basis.
 
 Advanced Sentiment Analysis: Utilizes the FinBERT model, a language model specifically fine-tuned for financial text, to accurately gauge market sentiment from news headlines.
@@ -18,7 +20,8 @@ Interactive Web Dashboard: A modern, responsive frontend built with HTML, CSS, a
 
 GPU Acceleration: Automatically utilizes available NVIDIA GPUs (via CUDA) to significantly speed up sentiment analysis and model training.
 
-🛠️ Tech Stack
+---
+🛠️ **Tech Stack**
 Backend: Python
 
 Machine Learning: TensorFlow (Keras), Scikit-learn
@@ -33,7 +36,8 @@ Frontend: HTML5, Tailwind CSS, JavaScript
 
 Charting: Plotly.js
 
-🚀 Getting Started
+---
+🚀 **Getting Started**
 Follow these instructions to set up and run the project on your local machine.
 
 Prerequisites
@@ -44,30 +48,30 @@ An environment manager like pip or conda.
 NVIDIA GPU with CUDA Toolkit and cuDNN installed (for GPU acceleration).
 
 1. Clone the Repository
-'''bash
+```bash
 git clone [https://github.com/your-username/stock-predictor-pro.git](https://github.com/your-username/stock-predictor-pro.git)
 cd stock-predictor-pro
-'''
+```
 2. Set Up a Virtual Environment
 It's highly recommended to use a virtual environment to manage dependencies.
 
-# For Windows
-'''bash
+### For Windows
+```bash
 python -m venv venv
 .\venv\Scripts\activate
-'''
+```
 
-# For macOS/Linux
-'''bash
+### For macOS/Linux
+```bash
 python3 -m venv venv
 source venv/bin/activate
-'''
+```
 
 3. Install Dependencies
 Install all the required Python packages from the requirements.txt file.
-'''bash
+```bash
 pip install -r requirements.txt
-'''
+```
 (Note: You may need to create a requirements.txt file by running pip freeze > requirements.txt in your terminal.)
 
 4. Set Up API Keys
@@ -76,10 +80,10 @@ You will need API keys for NewsAPI and Google Gemini.
 Create a file named .env in the root directory of the project.
 
 Add your API keys to this file as follows:
-'''
+```python
 NEWS_API_KEY="YOUR_NEWS_API_KEY_HERE"
 GOOGLE_API_KEY="YOUR_GEMINI_API_KEY_HERE"
-'''
+```
 
 5. (Optional) Download the FinBERT Model (Offline Use)
 To ensure the application runs smoothly without relying on an internet connection for the model, download the FinBERT files manually:
@@ -94,15 +98,17 @@ Place all the downloaded files into this new folder.
 
 Ensure the file path in data_processing.py and news_fetcher.py matches this location.
 
-🏃‍♀️ Usage
+---
+🏃‍♀️ **Usage**
 The entire pipeline is orchestrated by main.py.
 
 Configure Your Stocks: Open config.ini and list the stock tickers you want to analyze (e.g., stocks = AAPL,GOOGL,TSLA,NVDA).
 
 Run the Pipeline: Execute the main script from the root directory.
-'''bash
+
+```bash
 python main.py
-'''
+```
 
 The script will perform all four steps automatically:
 
@@ -116,7 +122,7 @@ Step 4: Generate 30-day predictions.
 
 View the Results: Once the pipeline is complete, open the public/index.html file in your web browser to see the interactive dashboard.
 
-'''
+```
 📂 Project Structure
 .
 ├── public/
@@ -135,16 +141,18 @@ View the Results: Once the pipeline is complete, open the public/index.html file
 ├── config.ini            # Main configuration for stocks and paths
 ├── main.py               # Orchestrator script to run the full pipeline
 └── README.md             # This file
-'''
+```
 
-📄 License
+----
+📄 **License**
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-Acknowledgements
-This project utilizes the NewsAPI for headline data.
+---
+🧠 **Acknowledgements**
+- This project utilizes the NewsAPI for headline data.
 
-Sentiment analysis is powered by the FinBERT model.
+- Sentiment analysis is powered by the FinBERT model.
 
-AI summaries are generated using Google's Gemini API.
+- AI summaries are generated using Google's Gemini API.
 
-Charting is made possible by the excellent Plotly.js library.
+- Charting is made possible by the excellent Plotly.js library.
