@@ -8,6 +8,7 @@ import random
 import configparser
 import sys
 import time
+import tqdm
 
 # --- DEFINITIVE LOGGING FIX ---
 # Get the root logger, which is the parent of all other loggers
